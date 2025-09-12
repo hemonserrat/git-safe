@@ -563,7 +563,8 @@ def _git_filter_diff(filename: str) -> int:
 def create_parser() -> argparse.ArgumentParser:
     """Create the argument parser."""
     parser = argparse.ArgumentParser(
-        prog="git-safe", description="Effortless file encryption for your git repos—pattern-matched, secure, and keyfile-flexible."
+        prog="git-safe",
+        description="Effortless file encryption for your git repos—pattern-matched, secure, and keyfile-flexible.",
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
