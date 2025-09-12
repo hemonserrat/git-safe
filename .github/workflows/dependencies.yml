@@ -1,0 +1,82 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install pip-tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install pip-tools
+
+    - name: Update requirements
+      run: |
+        # Update main requirements
+        pip-compile --upgrade requirements.in || echo "No requirements.in found, skipping main requirements update"
+        
+        # Update test requirements
+        pip-compile --upgrade requirements-test.in || echo "No requirements-test.in found, skipping test requirements update"
+
+    - name: Check for dependency vulnerabilities
+      run: |
+        pip install safety
+        safety check -r requirements.txt || echo "Vulnerabilities found in dependencies"
+        if [ -f requirements-test.txt ]; then
+          safety check -r requirements-test.txt || echo "Vulnerabilities found in test dependencies"
+        fi
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies'
+        title: 'chore: automated dependency updates'
+        body: |
+          ## Automated Dependency Updates
+          
+          This PR contains automated updates to project dependencies.
+          
+          ### Changes
+          - Updated Python package dependencies to latest compatible versions
+          - Ran security checks on updated dependencies
+          
+          ### Review Checklist
+          - [ ] All tests pass
+          - [ ] No new security vulnerabilities introduced
+          - [ ] Breaking changes are documented
+          
+          **Note**: This PR was created automatically by the dependency update workflow.
+        branch: automated/dependency-updates
+        delete-branch: true
+
+  dependabot-auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+    - name: Dependabot metadata
+      id: metadata
+      uses: dependabot/fetch-metadata@v1
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+    - name: Auto-merge Dependabot PRs
+      if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+      run: gh pr merge --auto --merge "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
