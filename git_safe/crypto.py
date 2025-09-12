@@ -2,13 +2,13 @@
 Cryptographic operations for git-safe
 """
 
+import hashlib
+import hmac
 import os
 import struct
-import hmac
-import hashlib
 
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 from .constants import BLOCK_SIZE, CTR_NONCE_LEN, HMAC_CHECK_LEN
 
@@ -28,7 +28,7 @@ def ctr_decrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
     # Create cipher in ECB mode for manual CTR implementation
     cipher = Cipher(algorithms.AES(aes_key), modes.ECB(), backend=default_backend())  # nosec B305
     encryptor = cipher.encryptor()
-    
+
     out = bytearray()
 
     for off in range(0, len(data), BLOCK_SIZE):
@@ -45,7 +45,7 @@ def ctr_decrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
             ctr = counter_bytes[:BLOCK_SIZE]
 
         stream = encryptor.update(ctr)
-        out.extend(b ^ s for b, s in zip(block, stream))
+        out.extend(b ^ s for b, s in zip(block, stream, strict=False))
 
     # Finalize the encryptor (required by cryptography library)
     encryptor.finalize()

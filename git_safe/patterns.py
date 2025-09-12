@@ -3,7 +3,6 @@ Pattern matching for git-safe using .gitattributes
 """
 
 from pathlib import Path
-from typing import List, Optional
 
 from pathspec import PathSpec, patterns
 
@@ -14,7 +13,7 @@ class PatternError(Exception):
     pass
 
 
-def parse_gitattributes(gitattributes_path: Optional[Path] = None) -> PathSpec:
+def parse_gitattributes(gitattributes_path: Path | None = None) -> PathSpec:
     """
     Parse .gitattributes file and extract patterns for git-safe filter.
 
@@ -63,7 +62,7 @@ def parse_gitattributes(gitattributes_path: Optional[Path] = None) -> PathSpec:
     return PathSpec.from_lines(patterns.GitWildMatchPattern, patterns_list)
 
 
-def find_matching_files(root_path: Path, pathspec: PathSpec) -> List[Path]:
+def find_matching_files(root_path: Path, pathspec: PathSpec) -> list[Path]:
     """
     Find all files matching the pathspec patterns.
 
@@ -85,7 +84,7 @@ def find_matching_files(root_path: Path, pathspec: PathSpec) -> List[Path]:
     return matching_files
 
 
-def should_encrypt_file(file_path: Path, root_path: Optional[Path] = None) -> bool:
+def should_encrypt_file(file_path: Path, root_path: Path | None = None) -> bool:
     """
     Check if a file should be encrypted based on .gitattributes patterns.
 

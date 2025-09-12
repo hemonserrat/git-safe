@@ -3,7 +3,6 @@ File operations for git-safe encryption/decryption
 """
 
 from pathlib import Path
-from typing import List, Optional
 
 from .constants import CTR_NONCE_LEN, HMAC_CHECK_LEN, MAGIC
 from .crypto import compute_hmac, ctr_decrypt, ctr_encrypt, generate_nonce, verify_hmac
@@ -61,7 +60,7 @@ def encrypt_file(file_path: Path, aes_key: bytes, hmac_key: bytes, backup: bool 
 
 
 def decrypt_file(
-    file_path: Path, aes_key: bytes, hmac_key: bytes, output_path: Optional[Path] = None, verify_only: bool = False
+    file_path: Path, aes_key: bytes, hmac_key: bytes, output_path: Path | None = None, verify_only: bool = False
 ) -> bool:
     """
     Decrypt a file, always overwriting the original file in-place.
@@ -147,7 +146,7 @@ def is_encrypted_file(file_path: Path) -> bool:
         return False
 
 
-def find_encrypted_files(root_path: Path) -> List[Path]:
+def find_encrypted_files(root_path: Path) -> list[Path]:
     """
     Find all encrypted files in a directory tree.
 

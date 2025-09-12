@@ -5,7 +5,6 @@ Keyfile management for git-safe
 import os
 import struct
 from pathlib import Path
-from typing import Optional, Tuple
 
 import gnupg
 
@@ -18,7 +17,7 @@ class KeyfileError(Exception):
     pass
 
 
-def generate_keys() -> Tuple[bytes, bytes]:
+def generate_keys() -> tuple[bytes, bytes]:
     """
     Generate new AES and HMAC keys.
 
@@ -54,7 +53,7 @@ def create_keyfile_data(aes_key: bytes, hmac_key: bytes) -> bytes:
     return bytes(data)
 
 
-def load_keyfile(path: Path) -> Tuple[bytes, bytes]:
+def load_keyfile(path: Path) -> tuple[bytes, bytes]:
     """
     Load keys from a keyfile.
 
@@ -130,7 +129,7 @@ def save_keyfile(path: Path, aes_key: bytes, hmac_key: bytes) -> None:
         raise KeyfileError(f"Cannot save keyfile {path}: {e}") from e
 
 
-def export_key_gpg(keyfile_path: Path, gpg_recipient: str, output_path: Optional[Path] = None) -> Path:
+def export_key_gpg(keyfile_path: Path, gpg_recipient: str, output_path: Path | None = None) -> Path:
     """
     Export keyfile encrypted with GPG.
 
@@ -170,7 +169,7 @@ def export_key_gpg(keyfile_path: Path, gpg_recipient: str, output_path: Optional
         raise KeyfileError(f"Failed to export GPG keyfile: {e}") from e
 
 
-def import_key_gpg(encrypted_keyfile_path: Path, output_path: Optional[Path] = None) -> Path:
+def import_key_gpg(encrypted_keyfile_path: Path, output_path: Path | None = None) -> Path:
     """
     Import keyfile decrypted from GPG.
 
@@ -216,7 +215,7 @@ def import_key_gpg(encrypted_keyfile_path: Path, output_path: Optional[Path] = N
         raise KeyfileError(f"Failed to import GPG keyfile: {e}") from e
 
 
-def generate_keyfile(path: Path) -> Tuple[bytes, bytes]:
+def generate_keyfile(path: Path) -> tuple[bytes, bytes]:
     """
     Generate a new keyfile with random keys.
 
