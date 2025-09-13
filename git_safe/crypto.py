@@ -25,31 +25,30 @@ def ctr_decrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
     Returns:
         Decrypted data
     """
-    # Create cipher in ECB mode for manual CTR implementation
-    cipher = Cipher(algorithms.AES(aes_key), modes.ECB(), backend=default_backend())  # nosec B305
-    encryptor = cipher.encryptor()
-
-    out = bytearray()
-
-    for off in range(0, len(data), BLOCK_SIZE):
-        block = data[off : off + BLOCK_SIZE]
-        # Create counter by combining nonce and block counter
-        counter_bytes = nonce + struct.pack(">I", off // BLOCK_SIZE)
-
-        # Pad or truncate to exactly BLOCK_SIZE (16 bytes) for ECB mode
-        if len(counter_bytes) < BLOCK_SIZE:
-            # Pad with zeros
-            ctr = counter_bytes + b"\x00" * (BLOCK_SIZE - len(counter_bytes))
-        else:
-            # Truncate to block size
-            ctr = counter_bytes[:BLOCK_SIZE]
-
-        stream = encryptor.update(ctr)
-        out.extend(b ^ s for b, s in zip(block, stream, strict=False))
-
-    # Finalize the encryptor (required by cryptography library)
-    encryptor.finalize()
-    return bytes(out)
+    if not data:
+        return b""
+    
+    # Prepare the initial counter value by combining nonce with counter
+    # Pad or truncate nonce to fit in the counter space
+    if len(nonce) < BLOCK_SIZE:
+        # Pad with zeros, leaving space for counter at the end
+        counter_prefix = nonce + b"\x00" * (BLOCK_SIZE - 4 - len(nonce))
+        initial_counter = counter_prefix + b"\x00\x00\x00\x00"  # 32-bit counter starts at 0
+    else:
+        # Truncate nonce and reserve last 4 bytes for counter
+        counter_prefix = nonce[:BLOCK_SIZE - 4]
+        initial_counter = counter_prefix + b"\x00\x00\x00\x00"
+    
+    # Use proper CTR mode from cryptography library
+    cipher = Cipher(
+        algorithms.AES(aes_key),
+        modes.CTR(initial_counter),
+        backend=default_backend()
+    )
+    decryptor = cipher.decryptor()
+    
+    result = decryptor.update(data) + decryptor.finalize()
+    return result
 
 
 def ctr_encrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
