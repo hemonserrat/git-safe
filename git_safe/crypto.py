@@ -5,7 +5,6 @@ Cryptographic operations for git-safe
 import hashlib
 import hmac
 import os
-import struct
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -27,7 +26,7 @@ def ctr_decrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
     """
     if not data:
         return b""
-    
+
     # Prepare the initial counter value by combining nonce with counter
     # Pad or truncate nonce to fit in the counter space
     if len(nonce) < BLOCK_SIZE:
@@ -36,17 +35,13 @@ def ctr_decrypt(aes_key: bytes, nonce: bytes, data: bytes) -> bytes:
         initial_counter = counter_prefix + b"\x00\x00\x00\x00"  # 32-bit counter starts at 0
     else:
         # Truncate nonce and reserve last 4 bytes for counter
-        counter_prefix = nonce[:BLOCK_SIZE - 4]
+        counter_prefix = nonce[: BLOCK_SIZE - 4]
         initial_counter = counter_prefix + b"\x00\x00\x00\x00"
-    
+
     # Use proper CTR mode from cryptography library
-    cipher = Cipher(
-        algorithms.AES(aes_key),
-        modes.CTR(initial_counter),
-        backend=default_backend()
-    )
+    cipher = Cipher(algorithms.AES(aes_key), modes.CTR(initial_counter), backend=default_backend())
     decryptor = cipher.decryptor()
-    
+
     result = decryptor.update(data) + decryptor.finalize()
     return result
 

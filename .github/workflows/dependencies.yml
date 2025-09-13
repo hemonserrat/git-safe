@@ -28,7 +28,7 @@ jobs:
       run: |
         # Update main requirements
         pip-compile --upgrade requirements.in || echo "No requirements.in found, skipping main requirements update"
-        
+
         # Update test requirements
         pip-compile --upgrade requirements-test.in || echo "No requirements-test.in found, skipping test requirements update"
 
@@ -48,18 +48,18 @@ jobs:
         title: 'chore: automated dependency updates'
         body: |
           ## Automated Dependency Updates
-          
+
           This PR contains automated updates to project dependencies.
-          
+
           ### Changes
           - Updated Python package dependencies to latest compatible versions
           - Ran security checks on updated dependencies
-          
+
           ### Review Checklist
           - [ ] All tests pass
           - [ ] No new security vulnerabilities introduced
           - [ ] Breaking changes are documented
-          
+
           **Note**: This PR was created automatically by the dependency update workflow.
         branch: automated/dependency-updates
         delete-branch: true

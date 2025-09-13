@@ -252,7 +252,7 @@ ID (4 bytes) + LENGTH (4 bytes) + DATA (LENGTH bytes)
    ```bash
    # Export for team members
    git-safe export-key teammate@company.com
-   
+
    # Team member imports
    git-safe unlock --gpg-keyfile shared-key.gpg
    ```
@@ -420,4 +420,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [cryptography](https://cryptography.io/) - Modern cryptographic operations
 - [python-gnupg](https://gnupg.readthedocs.io/) - GPG integration
 - [pathspec](https://python-path-specification.readthedocs.io/) - .gitattributes pattern matching
-
