@@ -86,15 +86,48 @@ jobs:
 
     - name: Generate changelog
       id: changelog
-      run: |
-        # Simple changelog generation - you might want to use a more sophisticated tool
-        echo "## Changes" > CHANGELOG.md
-        git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD >> CHANGELOG.md || echo "- Initial release" >> CHANGELOG.md
-        {
-          echo "changelog<<EOF"
-          cat CHANGELOG.md
-          echo "EOF"
-        } >> $GITHUB_OUTPUT
+      uses: mikepenz/release-changelog-builder-action@v5
+      with:
+        configuration: |
+          {
+            "categories": [
+              {
+                "title": "## 🚀 Features",
+                "labels": ["feature", "enhancement"]
+              },
+              {
+                "title": "## 🐛 Bug Fixes",
+                "labels": ["bug", "fix"]
+              },
+              {
+                "title": "## 🔧 Maintenance",
+                "labels": ["chore", "ci", "deps"]
+              },
+              {
+                "title": "## 📚 Documentation",
+                "labels": ["docs", "documentation"]
+              }
+            ],
+            "template": "#{{CHANGELOG}}\n\n## Other Changes\n#{{UNCATEGORIZED}}",
+            "pr_template": "- #{{TITLE}} (#{{NUMBER}})",
+            "empty_template": "- No changes in this release",
+            "transformers": [
+              {
+                "pattern": "^(feat|feature)(\\(.+\\))?!?:",
+                "target": "🚀 $1"
+              },
+              {
+                "pattern": "^(fix|bug)(\\(.+\\))?!?:",
+                "target": "🐛 $1"
+              },
+              {
+                "pattern": "^(chore|ci|deps)(\\(.+\\))?!?:",
+                "target": "🔧 $1"
+              }
+            ]
+          }
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
