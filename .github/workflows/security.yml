@@ -88,8 +88,8 @@ jobs:
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
-        base: main
-        head: HEAD
+        base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || 'HEAD~1' }}
+        head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'HEAD' }}
         extra_args: --debug --only-verified
 
   crypto-analysis:
