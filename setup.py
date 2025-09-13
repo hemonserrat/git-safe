@@ -8,9 +8,12 @@ from setuptools import find_packages, setup
 with open("README.md", encoding="utf-8") as fh:
     long_description = fh.read()
 
-# Read requirements
-with open("requirements.txt", encoding="utf-8") as fh:
-    requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+# Dependencies
+requirements = [
+    "cryptography>=3.4.8",
+    "python-gnupg>=0.5.0",
+    "pathspec>=0.9.0",
+]
 
 setup(
     name="git-safe",
