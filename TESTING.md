@@ -174,14 +174,14 @@ Common fixtures are available in `conftest.py`:
 def test_encrypt_decrypt_roundtrip(self, sample_keys, sample_data):
     """Test that encryption and decryption are inverse operations"""
     aes_key, hmac_key = sample_keys
-    
+
     # Encrypt
     nonce = generate_nonce(sample_data)
     encrypted = ctr_encrypt(aes_key, nonce, sample_data)
-    
+
     # Decrypt
     decrypted = ctr_decrypt(aes_key, nonce, encrypted)
-    
+
     # Verify
     assert decrypted == sample_data
     assert encrypted != sample_data  # Ensure it was actually encrypted

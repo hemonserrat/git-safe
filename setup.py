@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Setup script for git-safe."""
 
-
 from setuptools import find_packages, setup
 
 # Read the README file
@@ -16,7 +15,7 @@ requirements = [
 ]
 
 setup(
-    name="git-safe",
+    name="gitsafe-cli",
     version="1.0.0",
     author="Hernan Monserrat",
     author_email="",
