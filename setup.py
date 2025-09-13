@@ -16,7 +16,7 @@ requirements = [
 
 setup(
     name="gitsafe-cli",
-    version="1.0.0",
+    version="1.0.1",
     author="Hernan Monserrat",
     author_email="",
     description="Effortless file encryption for your git repos—pattern-matched, secure, and keyfile-flexible.",
