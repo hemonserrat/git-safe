@@ -3,8 +3,8 @@
 [![CI](https://github.com/hemonserrat/git-safe/workflows/CI/badge.svg)](https://github.com/hemonserrat/git-safe/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/hemonserrat/git-safe/workflows/Security%20Scan/badge.svg)](https://github.com/hemonserrat/git-safe/actions/workflows/security.yml)
 [![codecov](https://codecov.io/gh/hemonserrat/git-safe/branch/main/graph/badge.svg)](https://codecov.io/gh/hemonserrat/git-safe)
-[![PyPI version](https://badge.fury.io/py/git-safe.svg)](https://badge.fury.io/py/git-safe)
-[![Python versions](https://img.shields.io/pypi/pyversions/git-safe.svg)](https://pypi.org/project/git-safe/)
+[![PyPI version](https://badge.fury.io/py/gitsafe-cli.svg)](https://badge.fury.io/py/gitsafe-cli)
+[![Python versions](https://img.shields.io/pypi/pyversions/gitsafe-cli.svg)](https://pypi.org/project/gitsafe-cli/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -33,7 +33,7 @@ Effortless file encryption for your git repos—pattern-matched, secure, and key
 
 ```bash
 # Install from PyPI
-pip install git-safe
+pip install gitsafe-cli
 
 # Or install from source
 git clone https://github.com/hemonserrat/git-safe.git
@@ -67,7 +67,7 @@ git commit -m "Add secret config"
 ### From PyPI (Recommended)
 
 ```bash
-pip install git-safe
+pip install gitsafe-cli
 ```
 
 ### From Source
@@ -360,8 +360,8 @@ gpg --version  # Should show GPG version
 
 **Import errors**: If you encounter import errors, try reinstalling:
 ```bash
-pip uninstall git-safe
-pip install git-safe
+pip uninstall gitsafe-cli
+pip install gitsafe-cli
 ```
 
 ### Keyfile Issues

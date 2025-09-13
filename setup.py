@@ -16,7 +16,7 @@ requirements = [
 ]
 
 setup(
-    name="git-safe",
+    name="gitsafe-cli",
     version="1.0.0",
     author="Hernan Monserrat",
     author_email="",
