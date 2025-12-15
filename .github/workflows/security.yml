@@ -68,7 +68,7 @@ jobs:
         pip-audit
 
     - name: Upload vulnerability reports
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: vulnerability-reports
@@ -119,7 +119,7 @@ jobs:
         semgrep --config=p/python --config=p/security-audit --config=p/secrets git_safe/
 
     - name: Upload crypto analysis reports
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: crypto-analysis-reports
