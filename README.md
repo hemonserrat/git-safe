@@ -88,7 +88,7 @@ pip install -e ".[dev,security]"
 
 ### System Requirements
 
-- Python 3.8 or higher
+- Python 3.10 or higher
 - GPG (for keyfile sharing functionality)
   - **Ubuntu/Debian**: `sudo apt-get install gnupg`
   - **macOS**: `brew install gnupg`
